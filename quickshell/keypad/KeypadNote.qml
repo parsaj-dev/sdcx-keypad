@@ -9,7 +9,7 @@ import qs.modules.common.widgets
  * A one-line explainer at the top of a pane.
  *
  * The Light and Effects panes both change the colour of the same LEDs by
- * completely different mechanisms — one runs on the keypad's own firmware and
+ * completely different mechanisms. One runs on the keypad's own firmware and
  * persists, the other is rendered by this machine and stops when it does. That
  * distinction is invisible from the controls alone, so each pane states it.
  */

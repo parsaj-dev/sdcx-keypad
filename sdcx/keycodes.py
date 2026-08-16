@@ -10,16 +10,16 @@ The `type` values, and what the firmware does with them:
 
 | type | engine | value1 | value2 | value3 |
 |---|---|---|---|---|
-| 16 | mouse button / wheel | button bitmask | – | wheel delta, signed 8-bit |
-| 17 | mouse cursor move | – | – | – |
-| 19 | key disabled (DISKEY) | – | – | – |
-| 31 | on-device control | function id (see `_CONTROL`) | – | – |
-| 32 | standard keyboard | modifier bitmask | HID usage code | – |
-| 48 | consumer / multimedia | usage low byte | usage high byte | – |
-| 64 | system control | 1 power, 2 sleep, 4 wake | – | – |
-| 96 | run a macro | macro slot 0-15 | repeat mode (1 = once) | – |
-| 128 | open a website | – | – | – |
-| 255 | custom combination | – | – | – |
+| 16 | mouse button / wheel | button bitmask | n/a | wheel delta, signed 8-bit |
+| 17 | mouse cursor move | n/a | n/a | n/a |
+| 19 | key disabled (DISKEY) | n/a | n/a | n/a |
+| 31 | on-device control | function id (see `_CONTROL`) | n/a | n/a |
+| 32 | standard keyboard | modifier bitmask | HID usage code | n/a |
+| 48 | consumer / multimedia | usage low byte | usage high byte | n/a |
+| 64 | system control | 1 power, 2 sleep, 4 wake | n/a | n/a |
+| 96 | run a macro | macro slot 0-15 | repeat mode (1 = once) | n/a |
+| 128 | open a website | n/a | n/a | n/a |
+| 255 | custom combination | n/a | n/a | n/a |
 
 Types 128 and 255 are stored in areas this driver does not write (the URL blob
 and the vendor's combination editor), so they are decodable but not settable.
@@ -414,7 +414,7 @@ def parse_keycode(text: str) -> Keycode:
 
     parts = _split_combo(raw)
     if len(parts) == 1 and "_" in raw:
-        # Underscore is part of a name ("volume_up"), not a separator — except
+        # Underscore is part of a name ("volume_up"), not a separator, except
         # in the vendor's own shortcut spelling, "CTRL_C". Only treat it as one
         # when the leading token is a modifier and the whole thing named nothing.
         head, _, tail = raw.partition("_")

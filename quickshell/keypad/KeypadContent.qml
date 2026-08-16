@@ -9,7 +9,7 @@ import qs.modules.common.widgets
 
 /**
  * Tab shell for the keypad widget, plus the states where there is no keypad to
- * talk to. Each pane lives in its own file — inline components cannot be
+ * talk to. Each pane lives in its own file, because inline components cannot be
  * forward-referenced from inside a sibling inline component, and this widget hit
  * that limit early.
  */

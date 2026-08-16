@@ -1,13 +1,13 @@
 # SDCX / SDINNOVATION keypad USB HID protocol
 
 Reverse-engineered from the vendor's WebHID configurator at `https://www.sdcx-tech.com`
-(Next.js bundle, `_next/static/chunks/app/page-*.js`). No USB capture was needed — the
+(Next.js bundle, `_next/static/chunks/app/page-*.js`). No USB capture was needed: the
 web app ships the full protocol in readable JavaScript.
 
 Reference copies of the decisive source are kept alongside this document:
 
-- `reference-classS.js` — the device API class, all 32 methods, as shipped (minified).
-- `reference-layout-0816_246f.js` — the per-device layout/capability JSON for the HCY-K006.
+- `reference-classS.js`: the device API class, all 32 methods, as shipped (minified).
+- `reference-layout-0816_246f.js`: the per-device layout/capability JSON for the HCY-K006.
 
 Verified against: **HCY-K006**, USB `0816:246f`, product string `SIDE-KEYBOARD`,
 manufacturer `SDINNOVATION`, MCU type `951`.
@@ -59,7 +59,7 @@ write:  report id 0, exactly 64 bytes = [cmd, ...payload, 0x00 padding]
 read:   report id 0, exactly 64 bytes
 ```
 
-On Linux with `hidraw`, report ID 0 means **do not** prefix a report-ID byte — write
+On Linux with `hidraw`, report ID 0 means **do not** prefix a report-ID byte. Write
 the 64 payload bytes directly:
 
 ```python
@@ -77,8 +77,8 @@ The first wire byte is a group selector:
 | byte 0 | group |
 |---|---|
 | `0x06` | configuration (everything in §3) |
-| `0x55` | firmware update / bootloader — **destructive, see §5** |
-| `0x5A` | Artery-MCU firmware update — **destructive** |
+| `0x55` | firmware update / bootloader (**destructive, see §5**) |
+| `0x5A` | Artery-MCU firmware update (**destructive**) |
 
 For group `0x06`, the second wire byte is the sub-command. Throughout this document
 `sendDeviceData(6, [sub, ...])` therefore means wire bytes `[0x06, sub, ...]`.
@@ -115,17 +115,17 @@ firmware supports and the physical key layout.
 ### Light modes (HCY-K006)
 
 `value` is the wire value written into the `mode` field of `setLightConfig`.
-The booleans say which fields the firmware actually honours in that mode — the
+The booleans say which fields the firmware actually honours in that mode; the
 UI greys out the rest.
 
 | value | name (zh) | name (en) | brightness | speed | direction | color | palette |
 |---|---|---|---|---|---|---|---|
-| 0 | 关闭 | Off | – | – | – | – | – |
-| 1 | 常亮 | Steady on | ✓ | – | – | ✓ | ✓ |
-| 2 | 呼吸 | Breath | ✓ | ✓ | – | ✓ | ✓ |
-| 3 | 按亮 | Press-lit (react to keypress) | ✓ | ✓ | – | ✓ | ✓ |
-| 4 | 潮汐 | Tidal | ✓ | ✓ | – | ✓ | ✓ |
-| 5 | custom | Custom / per-key | ✓ | – | – | – | ✓ |
+| 0 | 关闭 | Off | ✗ | ✗ | ✗ | ✗ | ✗ |
+| 1 | 常亮 | Steady on | ✓ | ✗ | ✗ | ✓ | ✓ |
+| 2 | 呼吸 | Breath | ✓ | ✓ | ✗ | ✓ | ✓ |
+| 3 | 按亮 | Press-lit (react to keypress) | ✓ | ✓ | ✗ | ✓ | ✓ |
+| 4 | 潮汐 | Tidal | ✓ | ✓ | ✗ | ✓ | ✓ |
+| 5 | custom | Custom / per-key | ✓ | ✗ | ✗ | ✗ | ✓ |
 
 Mode `5` is the one that hands per-key colour control to the host (§3.4).
 
@@ -150,7 +150,7 @@ rotation. That caption is wrong: reading the factory keymap off the device gives
 `17 = volume_up, 18 = volume_down`, and louder-clockwise is universal. Trust the
 device, not the JSON's labels.
 
-Note the gap: knob actions live at indices **16–18**, not 6–8. Per-key colour and
+Note the gap: knob actions live at indices **16-18**, not 6-8. Per-key colour and
 keymap writes are indexed by this `key_index`, so the addressing is sparse.
 
 ---
@@ -162,7 +162,7 @@ the group byte `0x06` and wire byte 1 is the sub-command.
 
 ### 3.1 Device info
 
-#### `[5]` — get keyboard config
+#### `[5]`: get keyboard config
 
 Response is parsed as `resp[2]` = length, `resp.slice(5, 43)` = payload `l`:
 
@@ -182,27 +182,27 @@ Response is parsed as `resp[2]` = length, `resp.slice(5, 43)` = payload `l`:
 | `autoSleepTime` | `u16le(l[14], l[15])` | only if `resp[2] >= 16` |
 | `serialNumStr` | `resp.slice(21, 43)` as ASCII, NULs dropped | only if `resp[2] >= 40` |
 
-### 3.2 Lighting — global
+### 3.2 Lighting, global
 
-#### `[10]` — get light config
+#### `[10]`: get light config
 
 Response payload is `resp.slice(5, 16)`:
 
 | offset | field | encoding |
 |---|---|---|
 | 0 | `type` | always 1 in practice |
-| 1 | — | reserved |
+| 1 | n/a | reserved |
 | 2 | `mode` | see §2 light-mode table |
-| 3 | `brightness` | 0–4 on this device |
-| 4 | `speed` | 0–4 on this device |
+| 3 | `brightness` | 0-4 on this device |
+| 4 | `speed` | 0-4 on this device |
 | 5 | `direction` | 0 or 1 |
 | 6 | `color` | 0 = rainbow/palette, 1 = single colour |
 | 7 | `singleColorIndex` | index into the preset swatch row |
-| 8 | `h` | hue, 0–255 → degrees = `floor(h * 360 / 255)` |
-| 9 | `s` | saturation, 0–255 → percent = `floor(s * 100 / 255)` |
-| 10 | `v` | value, 0–255 → percent = `floor(v * 100 / 255)` |
+| 8 | `h` | hue, 0-255 → degrees = `floor(h * 360 / 255)` |
+| 9 | `s` | saturation, 0-255 → percent = `floor(s * 100 / 255)` |
+| 10 | `v` | value, 0-255 → percent = `floor(v * 100 / 255)` |
 
-#### `[11, len, 0, 0, ...cfg]` — set light config
+#### `[11, len, 0, 0, ...cfg]`: set light config
 
 `cfg` is 11 bytes laid out as:
 
@@ -227,7 +227,7 @@ Turning the lights off is exactly:
         └len┘   └type,─,mode=0,bri=0,spd=0,dir=0,color=0,─,h=0,s=0,v=0┘
 ```
 
-#### `[22, 0, 0, 0, 1, 0, mode]` — get firmware defaults for a mode
+#### `[22, 0, 0, 0, 1, 0, mode]`: get firmware defaults for a mode
 
 Returns the same 11-byte block as `[10]`, populated with the firmware's preferred
 defaults for `mode`. The web app uses this when you pick a new effect: it fetches the
@@ -291,7 +291,7 @@ The macro area is a flat 4096-byte blob.
 
 ## 4. Deriving the "turn it off" packet
 
-For the common case — kill the RGB and leave the keys working — the whole
+For the common case, killing the RGB and leaving the keys working, the whole
 interaction is one 64-byte write with no response required:
 
 ```
@@ -309,7 +309,7 @@ Group `0x55` and `0x5A` are the firmware-update path:
 
 | command | meaning |
 |---|---|
-| `06 55 FF 00 00` | `startUpdate` — enter update mode |
+| `06 55 FF 00 00` | `startUpdate`, enter update mode |
 | `06 55 FF 01 00` | `connectBootLoader` |
 | `06 55 FF 02 04 ...` | `startWriteRom(addr, len)` |
 | `06 55 FF 04 00` | `checkRom` |

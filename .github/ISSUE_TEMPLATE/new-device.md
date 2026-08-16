@@ -1,12 +1,12 @@
 ---
 name: Device report
 about: Report a keypad that works, partly works, or isn't recognised at all
-title: "Device: VVVV:PPPP — "
+title: "Device: VVVV:PPPP - "
 labels: device
 ---
 
 <!--
-Thanks — device reports are the most useful thing anyone can send this project.
+Thanks! Device reports are the most useful thing anyone can send this project.
 One device is hardware-verified; everything else is recognised on trust.
 Fill in what you can. A partial report is still worth filing.
 -->
@@ -22,7 +22,7 @@ $ lsusb
 
 ## `sdcx list`
 
-<!-- If it prints nothing, say so — that's the interesting case. -->
+<!-- If it prints nothing, say so; that's the interesting case. -->
 
 ```
 $ sdcx list
@@ -57,7 +57,7 @@ $ sdcx keys
 
 ## Model markings
 
-<!-- Anything printed on the device, the PCB, the box, the listing, or the manual —
+<!-- Anything printed on the device, the PCB, the box, the listing, or the manual,
      e.g. HCY-K006, a shop name, a vendor site. Rough is fine. -->
 
 - Model / markings:
@@ -68,14 +68,14 @@ $ sdcx keys
 
 <!-- Tick what you tried. Anything you didn't try, leave blank. -->
 
-- [ ] `sdcx light off` — turns the RGB off, and it stays off after a replug
-- [ ] `sdcx light mode <name>` — switching effects
+- [ ] `sdcx light off` turns the RGB off, and it stays off after a replug
+- [ ] `sdcx light mode <name>` switches effects
 - [ ] `sdcx light set --brightness / --speed / --color`
 - [ ] `sdcx keys` lists the right number of keys with sensible indices
 - [ ] `sdcx key color 0 '#00ff00'` lights the key you expected (in Custom mode)
 - [ ] `sdcx effect rainbow` runs
 
-Anything that went wrong — the exact error text, please, not a paraphrase:
+Anything that went wrong, with the exact error text please, not a paraphrase:
 
 ```
 

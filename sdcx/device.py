@@ -4,8 +4,9 @@ The vendor config channel is a plain HID interface with usage page 0xFF00 and
 usage 0x02, carrying one 64-byte input report and one 64-byte output report,
 both with report ID 0. That needs no HID library at all: on Linux the interface
 shows up as its own /dev/hidrawN and a read()/write() pair is the whole
-transport. Keeping it dependency-free matters here because this has to run from
-a Quickshell widget on NixOS without pulling in a Python environment.
+transport. Staying dependency-free keeps the package installable anywhere a
+Python interpreter already exists, including minimal images and environments
+where adding a compiled HID binding is impractical.
 
 See docs/PROTOCOL.md §1.
 """
@@ -40,7 +41,7 @@ class DeviceNotFound(SdcxError):
 
 
 class PermissionDenied(SdcxError):
-    """Raised with an actionable message — this is the common first-run failure."""
+    """Raised with an actionable message; this is the common first-run failure."""
 
 
 @dataclass(frozen=True)
@@ -210,7 +211,7 @@ class Transport:
             if remaining <= 0:
                 raise SdcxError(
                     f"timed out waiting for a response from {self.path}. "
-                    "The device may be in an unexpected state — try replugging it."
+                    "The device may be in an unexpected state. Try replugging it."
                 )
             ready, _, _ = select.select([self._fd], [], [], remaining)
             if not ready:

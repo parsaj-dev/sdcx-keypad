@@ -26,7 +26,7 @@ ColumnLayout {
 
     KeypadNote {
         visible: KeypadService.light?.mode !== 5
-        text: Translation.tr("Per-key colours only appear in the Custom effect — in any other mode the keypad repaints them itself.")
+        text: Translation.tr("Per-key colours only appear in the Custom effect. In any other mode the keypad repaints them itself.")
         icon: "palette"
     }
 
@@ -305,7 +305,7 @@ ColumnLayout {
             // `hovered` property, which a bare Rectangle does not.
             StyledToolTip {
                 extraVisibleCondition: capMouse.containsMouse
-                text: `${cap.keyData.label} — ${cap.capColor}`
+                text: `${cap.keyData.label}: ${cap.capColor}`
             }
         }
     }

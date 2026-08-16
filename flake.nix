@@ -11,7 +11,7 @@
       # Every vendor ID the vendor's own WebHID bundle filters on (docs/PROTOCOL.md §6).
       # The full list is 196 vid:pid pairs; matching on vendor alone keeps the rule
       # readable and is safe because it is further constrained to hidraw nodes whose
-      # device is the vendor-defined config interface — the two keyboard interfaces
+      # device is the vendor-defined config interface; the two keyboard interfaces
       # under the same VID:PID are untouched by a hidraw uaccess tag. `sdcx
       # install-udev-rule` writes the precise 196-line version if you prefer it.
       vendorIds = [
@@ -56,7 +56,7 @@
           packages = [ pkgs.python3 pkgs.python3Packages.pip pkgs.usbutils ];
           shellHook = ''
             export PYTHONPATH="$PWD:$PYTHONPATH"
-            echo "sdcx dev shell — run: python3 -m sdcx list"
+            echo "sdcx dev shell, run: python3 -m sdcx list"
           '';
         };
       });

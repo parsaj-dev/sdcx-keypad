@@ -12,7 +12,7 @@ import qs.modules.common.widgets
  *
  * Deliberately does NOT use the Material You palette for its swatches. Those are
  * surface colours chosen to sit behind text, and in a dark theme primary,
- * secondary and tertiary are all pale near-greys — on an RGB LED they are
+ * secondary and tertiary are all pale near-greys. On an RGB LED they are
  * indistinguishable from white. A swatch here has to be the literal colour the
  * LED will emit, so the presets are fixed, saturated hues.
  *
@@ -23,7 +23,7 @@ Item {
     id: root
 
     property color selected: "#ff0000"
-    /** Emitted only on release/commit, never mid-drag — each change is a USB write. */
+    /** Emitted only on release/commit, never mid-drag: each change is a USB write. */
     signal picked(color chosen)
 
     implicitHeight: layout.implicitHeight

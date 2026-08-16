@@ -1,9 +1,9 @@
 """Command line interface.
 
-Every subcommand accepts --json and prints a single JSON object on stdout, so
-this doubles as the backend for the Quickshell widget. Errors also go out as
-JSON when --json is set, with a non-zero exit code, so a caller never has to
-parse human prose to find out what went wrong.
+Every subcommand accepts --json and prints a single JSON object on stdout, which
+makes the CLI usable as a backend for panels, status bars and scripts. Errors are
+emitted as JSON too when --json is set, with a non-zero exit code, so a caller
+never has to parse human prose to find out what went wrong.
 """
 
 from __future__ import annotations
@@ -33,7 +33,7 @@ UDEV_RULE_PATH = "/etc/udev/rules.d/70-sdcx-keypad.rules"
 
 def _udev_rule() -> str:
     lines = [
-        "# SDCX / SDINNOVATION programmable keypads — vendor config interface.",
+        "# SDCX / SDINNOVATION programmable keypads: vendor config interface.",
         "# Grants the console user access to the HID interface on usage page 0xFF00,",
         "# which carries configuration only. The keyboard interfaces are untouched.",
         "# Installed by: sudo sdcx install-udev-rule",
@@ -417,7 +417,7 @@ def _declarative_help() -> str:
     """Guidance for distributions where /etc is generated, not edited."""
     if _is_nixos():
         return (
-            "/etc/udev/rules.d is read-only on NixOS — it is a symlink into the\n"
+            "/etc/udev/rules.d is read-only on NixOS: it is a symlink into the\n"
             "Nix store, and a file written there would be discarded on the next\n"
             "rebuild. Declare the rule instead. Either use this project's flake:\n"
             "\n"

@@ -1,7 +1,7 @@
 """Linux driver for SDCX / SDINNOVATION programmable keypads.
 
 Protocol reverse-engineered from the vendor's WebHID configurator; see
-docs/PROTOCOL.md. Pure standard library — the config interface is a plain
+docs/PROTOCOL.md. Pure standard library; the config interface is a plain
 64-byte hidraw channel, so no HID binding is needed.
 """
 

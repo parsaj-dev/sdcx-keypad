@@ -26,23 +26,23 @@ StyledFlickable {
 
         InfoRow {
             label: Translation.tr("Model")
-            value: KeypadService.device?.model ?? "—"
+            value: KeypadService.device?.model ?? "-"
         }
         InfoRow {
             label: Translation.tr("USB ID")
-            value: KeypadService.device?.usb_id ?? "—"
+            value: KeypadService.device?.usb_id ?? "-"
         }
         InfoRow {
             label: Translation.tr("Firmware")
-            value: KeypadService.info?.firmware !== undefined ? String(KeypadService.info.firmware) : "—"
+            value: KeypadService.info?.firmware !== undefined ? String(KeypadService.info.firmware) : "-"
         }
         InfoRow {
             label: Translation.tr("Node")
-            value: KeypadService.device?.path ?? "—"
+            value: KeypadService.device?.path ?? "-"
         }
 
         // A layout the driver has not had transcribed still does global lighting
-        // correctly, but cannot address individual keys — worth saying plainly.
+        // correctly, but cannot address individual keys, which is worth saying plainly.
         StyledText {
             Layout.fillWidth: true
             visible: KeypadService.device !== null && KeypadService.device.verified === false

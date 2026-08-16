@@ -1,8 +1,8 @@
 """Per-device capability descriptions.
 
 The vendor web app ships one JSON per USB ID describing the light modes the
-firmware implements and where the physical keys sit. The parts a driver needs —
-which modes exist and which key indices are addressable — are transcribed here
+firmware implements and where the physical keys sit. The parts a driver needs,
+which modes exist and which key indices are addressable, are transcribed here
 so the package has no runtime dependency on the vendor's site.
 
 devices.json, shipped inside this package, holds the full 196-ID list the
@@ -43,7 +43,7 @@ class Key:
     `row`/`col` are the key's position as it physically sits on the pad, derived
     from the x/y coordinates in the vendor layout. They are deliberately not the
     JSON's own `row`/`col`, which are electrical matrix positions and do not
-    correspond to where the key is on the board — a UI drawing the pad wants the
+    correspond to where the key is on the board; a UI drawing the pad wants the
     physical arrangement.
     """
 
@@ -115,7 +115,7 @@ _K006 = Layout(
         # The knob's three actions. They share one physical encoder, so a UI
         # should draw them as one control rather than as three keys.
         #
-        # Rotation direction is taken from what the firmware actually ships —
+        # Rotation direction is taken from what the firmware actually ships:
         # reading the factory keymap gives index 17 = volume up, 18 = volume
         # down, and louder-clockwise is universal. The vendor's own layout JSON
         # captions them the other way round (18 = 音量+), which contradicts both

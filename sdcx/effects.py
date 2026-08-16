@@ -16,7 +16,7 @@ Two hardware facts shape everything below:
 
 Effects are parameterised declaratively: each one names the parameters it
 accepts out of PARAM_LIBRARY, and that single declaration drives three things at
-once — the argparse flags, the JSON manifest a GUI builds its controls from, and
+once: the argparse flags, the JSON manifest a GUI builds its controls from, and
 the values handed to the render function. Adding a knob to an effect is one name
 in one tuple; nothing else has to learn about it.
 
@@ -213,7 +213,7 @@ class EffectParams:
 
     `values` holds the resolved parameters, already coerced and defaulted, keyed
     by the schema name. `state` is per-run mutable scratch, owned by the effect:
-    it exists for effects that are not pure functions of the clock — `cpu` keeps
+    it exists for effects that are not pure functions of the clock, and `cpu` keeps
     its previous /proc/stat sample there. Nothing here is global, so two effects
     running in two processes cannot interfere.
     """
@@ -322,7 +322,7 @@ def _ordered(keys: tuple[Key, ...]) -> tuple[Key, ...]:
     """Every key as one strip: the switches first, then the knob actions.
 
     Bar-style effects want a single well-defined order over all nine LEDs, and
-    key index is not it — the indices are sparse (0-5 then 16-18) and the knob
+    key index is not it, because the indices are sparse (0-5 then 16-18) and the knob
     actions are numbered 18, 16, 17 in physical top-to-bottom order.
     """
     return _main_keys(keys) + tuple(sorted(
@@ -471,7 +471,7 @@ def _noise(params: EffectParams, step: int, index: int) -> float:
     """Reproducible per-(step, key) value in 0-1.
 
     A hash rather than a stateful generator so any frame can be computed on its
-    own — the render loop must be able to skip frames without the effect drifting.
+    own, so the render loop can skip frames without the effect drifting.
     """
     h = (int(params.get("seed")) * 2654435761) ^ (step * 40503) ^ (index * 2246822519)
     h &= 0xFFFFFFFF
@@ -751,7 +751,7 @@ EFFECTS: dict[str, Effect] = {
         help=(
             "A still ramp from --color to --secondary-color across the pad's "
             "diagonal, or one of the fixed --palette ramps. Nothing moves, so it "
-            "costs no bus traffic after the first frame — the runner only writes "
+            "costs no bus traffic after the first frame: the runner only writes "
             "keys that changed. The one to leave running."
         ),
         params=_params("color", "secondary_color", "palette", "intensity", "reverse"),
@@ -800,7 +800,7 @@ EFFECTS: dict[str, Effect] = {
         "cpu", "heat map of real CPU load from /proc/stat", _cpu,
         help=(
             "A bar across all nine LEDs showing CPU busy time, measured as the "
-            "delta between frames — /proc/stat counters are cumulative since "
+            "delta between frames, because /proc/stat counters are cumulative since "
             "boot, so one sample would only ever tell you the average since boot. "
             "--smoothing controls how twitchy it is."
         ),
@@ -810,7 +810,7 @@ EFFECTS: dict[str, Effect] = {
         "memory", "RAM in use, as a bar", _memory,
         help=(
             "Used memory as a fraction of MemTotal, from MemAvailable rather than "
-            "MemFree — free memory on Linux is meaningless because the page cache "
+            "MemFree, because free memory on Linux is meaningless when the page cache "
             "consumes all of it. Moves slowly; genuinely glanceable."
         ),
         params=_params("palette", "color", "secondary_color", "smoothing", "intensity"),
@@ -892,7 +892,7 @@ def resolve_params(effect: Effect, args) -> EffectParams:
 
     Only the parameters the effect declares are read. Flags belonging to other
     effects are ignored rather than rejected, which is what lets one shared set
-    of flags serve fourteen effects — `sdcx effect solid --density 0.9` is
+    of flags serve fourteen effects, so `sdcx effect solid --density 0.9` is
     harmless rather than an error.
     """
     values: dict[str, Any] = {}
@@ -930,8 +930,8 @@ def run_effect(args) -> int:
     frames = 0
     interrupted = False
 
-    # An effect is normally stopped by something else killing it — Ctrl-C from a
-    # shell, but SIGTERM from the Quickshell widget's stop button. The default
+    # An effect is normally stopped by something else killing it: Ctrl-C from a
+    # shell, or SIGTERM from whatever GUI or script launched it. The default
     # SIGTERM disposition kills the process outright, which would skip the
     # restore below and strand the pad mid-effect, so route it through the same
     # unwinding path as Ctrl-C.

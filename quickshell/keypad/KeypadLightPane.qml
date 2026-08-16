@@ -29,7 +29,7 @@ StyledFlickable {
         spacing: Appearance.spacing.normal
 
         KeypadNote {
-            text: Translation.tr("Runs on the keypad itself and is saved to it — these keep working when this computer is off.")
+            text: Translation.tr("Runs on the keypad itself and is saved to it, so these keep working when this computer is off.")
             icon: "memory"
         }
 
@@ -62,7 +62,7 @@ StyledFlickable {
         }
 
         // Brightness and speed are 0-4 integer steps in the firmware, not
-        // continuous ranges, and each mode honours only some of them — the
+        // continuous ranges, and each mode honours only some of them. The
         // capability flags come from the device's own descriptor.
         SteppedSlider {
             Layout.fillWidth: true
@@ -90,7 +90,7 @@ StyledFlickable {
         }
 
         // Palette mode is the firmware cycling hues on its own, which is a
-        // different thing from any one colour — so it is a toggle above the
+        // different thing from any one colour, so it is a toggle above the
         // picker rather than another swatch inside it.
         ConfigSwitch {
             Layout.fillWidth: true

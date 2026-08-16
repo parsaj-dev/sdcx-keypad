@@ -10,7 +10,7 @@ import qs.modules.common.widgets
 /**
  * Host-rendered effects: this machine computes each frame and streams it to the
  * pad as per-key colours. That is what lets an effect show CPU load or battery,
- * which the firmware could never know about — and equally why they stop when
+ * which the firmware could never know about, and equally why they stop when
  * this process does.
  *
  * The list and every effect's controls are built from `sdcx effect list --json`,

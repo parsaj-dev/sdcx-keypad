@@ -2,7 +2,7 @@
 
 Wire format is [group, sub, ...args] padded to 64 bytes, no checksum. Group
 0x06 is configuration; the firmware-update groups (0x55, 0x5A) are deliberately
-not implemented — see docs/PROTOCOL.md §5.
+not implemented; see docs/PROTOCOL.md §5.
 """
 
 from __future__ import annotations
@@ -51,7 +51,7 @@ MACRO_SLOTS = MACRO_INDEX_SIZE // 2
 MACRO_STEP_SIZE = 4
 
 # Reads chunk at 56 data bytes because that is what fits after the 8-byte
-# response header. Macro *writes* chunk at 59 — the write frame has no header
+# response header. Macro *writes* chunk at 59, because the write frame has no header
 # beyond [group, sub, off_lo, off_hi], so three more bytes fit. The vendor app
 # uses exactly these two numbers and mixing them up silently corrupts the blob.
 READ_CHUNK = 56
@@ -163,7 +163,7 @@ class KeyboardConfig:
 class KeyAssignment:
     """What one key does, as the four bytes the firmware stores.
 
-    `name` is the round-trippable rendering of those bytes — feed it back to
+    `name` is the round-trippable rendering of those bytes: feed it back to
     `sdcx keymap set` and you get the same assignment. It is derived, not read
     from the device: the firmware stores no names.
     """
@@ -218,7 +218,7 @@ STEP_KIND_NAMES: dict[int, str] = {
 class MacroStep:
     """One event in a macro: four bytes `[delay_lo, delay_hi, flags, code]`.
 
-    `delay` is the pause *after* this step, in milliseconds — the vendor editor
+    `delay` is the pause *after* this step, in milliseconds. The vendor editor
     records it as the gap to the next event, and the last step's delay is the
     tail before the macro ends.
 
@@ -569,8 +569,8 @@ class Keypad:
     def _keymap_span(self) -> int:
         """Bytes of keymap that cover every addressable key on this device.
 
-        Key indices are sparse — the K006's knob lives at 16-18 while its keys
-        are 0-5 — and the table is flat, four bytes per index. So the span to
+        Key indices are sparse (the K006's knob lives at 16-18 while its keys
+        are 0-5) and the table is flat, four bytes per index. So the span to
         read is (highest index + 1) * 4, not (key count) * 4.
         """
         keys = self.layout.keys
@@ -665,7 +665,7 @@ class Keypad:
             chunk_index += 1
 
     def get_key_infos(self) -> list[KeyAssignment]:
-        """Read the firmware's own key table — what each key does as shipped.
+        """Read the firmware's own key table: what each key does as shipped.
 
         This is the 576-byte factory table behind `[7]`, not the per-layer user
         keymap. It is what `sdcx keymap reset` restores from.
@@ -685,7 +685,7 @@ class Keypad:
     def reset_keymap(self, layer: int = 0) -> dict[int, KeyAssignment]:
         """Put every key back to the function the firmware ships it with.
 
-        There is no "reset keymap" command — `[15, 255]` resets everything
+        There is no "reset keymap" command; `[15, 255]` resets everything
         including the colours and macros. So this reads the factory key table
         and writes it back over the layer, which touches nothing else.
         """
