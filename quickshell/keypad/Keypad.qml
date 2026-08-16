@@ -15,8 +15,8 @@ import qs.modules.ii.overlay
  */
 StyledOverlayWidget {
     id: root
-    minimumWidth: 340
-    minimumHeight: 400
+    minimumWidth: 380
+    minimumHeight: 440
 
     contentItem: OverlayBackground {
         radius: root.contentRadius
@@ -48,7 +48,11 @@ StyledOverlayWidget {
                 }
                 SecondaryTabButton {
                     buttonIcon: "graphic_eq"
-                    buttonText: Translation.tr("Effects")
+                    buttonText: Translation.tr("Live")
+                }
+                SecondaryTabButton {
+                    buttonIcon: "info"
+                    buttonText: Translation.tr("Device")
                 }
             }
 

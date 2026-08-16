@@ -9,16 +9,22 @@ parse human prose to find out what went wrong.
 from __future__ import annotations
 
 import argparse
+import errno
 import json
 import sys
+from pathlib import Path
 
 from .device import DeviceNotFound, PermissionDenied, SdcxError, enumerate_devices
+from .keycodes import CATEGORIES, REGISTRY, by_category, parse_keycode, search
 from .layouts import get_layout, supported_ids
 from .protocol import (
+    MACRO_SLOTS,
     MAX_BRIGHTNESS,
     MAX_SPEED,
     Keypad,
     LightConfig,
+    Macro,
+    macro_from_sequence,
     parse_hex_color,
 )
 
@@ -257,6 +263,121 @@ def cmd_key_color(args) -> int:
     return 0
 
 
+def cmd_keycodes(args) -> int:
+    codes = REGISTRY
+    if args.category:
+        if args.category not in CATEGORIES:
+            raise SdcxError(
+                f"unknown category {args.category!r}. Available: " + ", ".join(CATEGORIES)
+            )
+        codes = tuple(by_category(args.category))
+    if args.search:
+        wanted = {id(c) for c in search(args.search)}
+        codes = tuple(c for c in codes if id(c) in wanted)
+    payload = {"ok": True, "keycodes": [c.to_dict() for c in codes]}
+    if args.json:
+        _emit(payload, True)
+    else:
+        for c in codes:
+            print(f"{c.name:<24} {c.category:<9} {c.code}")
+    return 0
+
+
+def cmd_keymap_get(args) -> int:
+    with Keypad.open(path=args.device) as pad:
+        keymap = pad.get_keymap(args.layer)
+        rows = [
+            {
+                "label": (k.label if (k := pad.layout.key_by_index(index)) else str(index)),
+                **assignment.to_dict(),
+            }
+            for index, assignment in sorted(keymap.items())
+        ]
+        payload = {"ok": True, "layer": args.layer, "keys": rows}
+        if args.json:
+            _emit(payload, True)
+        else:
+            for row in rows:
+                print(f"{row['key_index']:>3}  {row['label']:<12} {row['name']}")
+    return 0
+
+
+def cmd_keymap_set(args) -> int:
+    with Keypad.open(path=args.device) as pad:
+        assignment = pad.set_key(args.index, parse_keycode(args.keycode), args.layer)
+        _emit(
+            {"ok": True, "layer": args.layer, "key": assignment.to_dict()},
+            args.json,
+            f"Key {args.index} is now {assignment.name}.",
+        )
+    return 0
+
+
+def cmd_keymap_reset(args) -> int:
+    with Keypad.open(path=args.device) as pad:
+        defaults = pad.reset_keymap(args.layer)
+        _emit(
+            {
+                "ok": True,
+                "layer": args.layer,
+                "keys": [a.to_dict() for a in sorted(defaults.values(), key=lambda a: a.key_index)],
+            },
+            args.json,
+            f"Layer {args.layer} restored to the firmware's own key table. "
+            "Macros and colours were not touched.",
+        )
+    return 0
+
+
+def cmd_macro_get(args) -> int:
+    with Keypad.open(path=args.device) as pad:
+        if args.raw:
+            blob = pad.get_macro_data()
+            _emit(
+                {"ok": True, "bytes": list(blob)},
+                args.json,
+                blob.hex(),
+            )
+            return 0
+        macros = [m for m in pad.get_macros() if m.steps or args.all]
+        payload = {"ok": True, "macros": [m.to_dict() for m in macros]}
+        if args.json:
+            _emit(payload, True)
+        elif not macros:
+            print("No macros stored. Record one with: sdcx macro set 0 'ctrl+c, a'")
+        else:
+            for macro in macros:
+                print(f"macro:{macro.slot}  {len(macro.steps)} steps")
+                for step in macro.steps:
+                    print(
+                        f"    {step.kind_name:<7} {step.code:>3} "
+                        f"{'press' if step.press else 'release':<8} {step.delay}ms"
+                    )
+    return 0
+
+
+def cmd_macro_set(args) -> int:
+    steps = macro_from_sequence(args.sequence, args.delay)
+    with Keypad.open(path=args.device) as pad:
+        macros = pad.get_macros()
+        macros[args.slot] = Macro(args.slot, steps)
+        pad.set_macros(macros)
+        _emit(
+            {"ok": True, "macro": macros[args.slot].to_dict()},
+            args.json,
+            f"macro:{args.slot} set, {len(steps)} steps. "
+            f"Bind it with: sdcx keymap set <key> macro:{args.slot}",
+        )
+    return 0
+
+
+def cmd_macro_reset(args) -> int:
+    with Keypad.open(path=args.device) as pad:
+        pad.reset_macros()
+        _emit({"ok": True}, args.json, "Macro area cleared. The keymap was not touched.")
+    return 0
+
+
 def cmd_profile(args) -> int:
     with Keypad.open(path=args.device) as pad:
         pad.set_profile(args.index)
@@ -285,6 +406,46 @@ def cmd_factory_reset(args) -> int:
     return 0
 
 
+def _is_nixos() -> bool:
+    try:
+        return "ID=nixos" in Path("/etc/os-release").read_text()
+    except OSError:
+        return False
+
+
+def _declarative_help() -> str:
+    """Guidance for distributions where /etc is generated, not edited."""
+    if _is_nixos():
+        return (
+            "/etc/udev/rules.d is read-only on NixOS — it is a symlink into the\n"
+            "Nix store, and a file written there would be discarded on the next\n"
+            "rebuild. Declare the rule instead. Either use this project's flake:\n"
+            "\n"
+            "    # flake.nix\n"
+            "    inputs.sdcx-keypad.url = \"github:parsaj-dev/sdcx-keypad\";\n"
+            "    # then, in your host configuration:\n"
+            "    imports = [ inputs.sdcx-keypad.nixosModules.default ];\n"
+            "    programs.sdcx-keypad.enable = true;\n"
+            "\n"
+            "or, without adding an input, add this to configuration.nix:\n"
+            "\n"
+            "    services.udev.extraRules = ''\n"
+            "      KERNEL==\"hidraw*\", SUBSYSTEM==\"hidraw\", "
+            "ATTRS{idVendor}==\"0816\", TAG+=\"uaccess\"\n"
+            "    '';\n"
+            "\n"
+            "Then `sudo nixos-rebuild switch` and replug the keypad.\n"
+            "Run `sdcx install-udev-rule --print` for the exhaustive rule covering\n"
+            "every supported USB ID."
+        )
+    return (
+        f"{UDEV_RULE_PATH} is on a read-only filesystem.\n"
+        "Your distribution most likely generates /etc declaratively, so the rule\n"
+        "belongs in its configuration rather than being written directly.\n"
+        "Run `sdcx install-udev-rule --print` to get the rule to add."
+    )
+
+
 def cmd_install_udev_rule(args) -> int:
     rule = _udev_rule()
     if args.print:
@@ -301,6 +462,15 @@ def cmd_install_udev_rule(args) -> int:
             file=sys.stderr,
         )
         return 1
+    except OSError as exc:
+        # A read-only /etc means a declarative distribution owns it. Writing the
+        # file is not merely blocked there, it is the wrong approach: the next
+        # rebuild would discard it. Point at the declarative equivalent instead
+        # of suggesting the user fight their package manager.
+        if exc.errno != errno.EROFS:
+            raise
+        print(_declarative_help(), file=sys.stderr)
+        return 1
     print(f"Wrote {UDEV_RULE_PATH}")
     print("Reload with: sudo udevadm control --reload-rules && sudo udevadm trigger")
     print("Then replug the keypad.")
@@ -311,7 +481,12 @@ def cmd_effect(args) -> int:
     from .effects import run_effect, EFFECTS
 
     if args.name == "list":
-        payload = {"ok": True, "effects": [{"name": n, "description": e.description} for n, e in EFFECTS.items()]}
+        from .effects import effects_manifest
+
+        # The manifest carries each effect's long-form help and its parameter
+        # schema, which is what lets a GUI build controls and hover-help without
+        # knowing anything about individual effects.
+        payload = {"ok": True, "effects": effects_manifest()}
         if args.json:
             _emit(payload, True)
         else:
@@ -377,12 +552,61 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument("color", metavar="#RRGGBB")
     p.set_defaults(func=cmd_key_color)
 
+    p = sub.add_parser("keycodes", help="list the keycode names 'keymap set' accepts")
+    p.add_argument("--category", help="one of: " + ", ".join(CATEGORIES))
+    p.add_argument("--search", metavar="TEXT", help="substring match on name or code")
+    p.set_defaults(func=cmd_keycodes)
+
+    keymap = sub.add_parser("keymap", help="what each key does").add_subparsers(
+        dest="keymap_command", required=True
+    )
+
+    p = keymap.add_parser("get", help="show each key's current binding")
+    p.add_argument("--layer", type=int, default=0)
+    p.set_defaults(func=cmd_keymap_get)
+
+    p = keymap.add_parser("set", help="rebind one key, e.g. sdcx keymap set 0 ctrl+c")
+    p.add_argument("index", type=int, help="key index; see sdcx keys")
+    p.add_argument("keycode", help="keycode name, ctrl+c style combination, or macro:N")
+    p.add_argument("--layer", type=int, default=0)
+    p.set_defaults(func=cmd_keymap_set)
+
+    p = keymap.add_parser("reset", help="restore the firmware's own key table")
+    p.add_argument("--layer", type=int, default=0)
+    p.set_defaults(func=cmd_keymap_reset)
+
+    macro = sub.add_parser("macro", help="macro slots").add_subparsers(
+        dest="macro_command", required=True
+    )
+
+    p = macro.add_parser("get", help="show the stored macros")
+    p.add_argument("--all", action="store_true", help="include empty slots")
+    p.add_argument("--raw", action="store_true", help="dump the 4096-byte area instead")
+    p.set_defaults(func=cmd_macro_get)
+
+    p = macro.add_parser("set", help="record a macro, e.g. sdcx macro set 0 'ctrl+c, a'")
+    p.add_argument("slot", type=int, choices=range(MACRO_SLOTS), metavar=f"SLOT(0-{MACRO_SLOTS - 1})")
+    p.add_argument("sequence", help="comma-separated keystrokes, each pressed and released")
+    p.add_argument("--delay", type=int, default=10, help="milliseconds between events")
+    p.set_defaults(func=cmd_macro_set)
+
+    p = macro.add_parser("reset", help="clear every macro slot")
+    p.set_defaults(func=cmd_macro_reset)
+
     p = sub.add_parser("effect", help="host-driven live effects")
     p.add_argument("name", help="effect name, or 'list'")
     p.add_argument("--fps", type=float, default=20.0)
     p.add_argument("--duration", type=float, default=0.0, help="seconds; 0 = until interrupted")
     p.add_argument("--color", metavar="#RRGGBB", default="#7c4dff")
     p.add_argument("--restore", action="store_true", help="restore previous mode on exit")
+    try:
+        # Parameterised effects register their own flags. Older installs of the
+        # package do not have this, and the rest of the CLI must still work.
+        from .effects import register_effect_arguments
+
+        register_effect_arguments(p)
+    except ImportError:
+        pass
     p.set_defaults(func=cmd_effect)
 
     p = sub.add_parser("profile", help="select a configuration scheme")

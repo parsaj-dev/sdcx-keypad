@@ -112,11 +112,17 @@ _K006 = Layout(
         Key(3, "Key 4", 1, 0),
         Key(4, "Key 5", 1, 1),
         Key(5, "Key 6", 1, 2),
-        # The knob's three actions. They share one physical encoder, so they are
-        # drawn as one control rather than three keys.
-        Key(18, "Knob CW", 0, 3, kind="knob"),
+        # The knob's three actions. They share one physical encoder, so a UI
+        # should draw them as one control rather than as three keys.
+        #
+        # Rotation direction is taken from what the firmware actually ships —
+        # reading the factory keymap gives index 17 = volume up, 18 = volume
+        # down, and louder-clockwise is universal. The vendor's own layout JSON
+        # captions them the other way round (18 = 音量+), which contradicts both
+        # its firmware and the x-coordinates it gives them; it is wrong.
+        Key(17, "Knob CW", 0, 3, kind="knob"),
         Key(16, "Knob press", 1, 3, kind="knob"),
-        Key(17, "Knob CCW", 2, 3, kind="knob"),
+        Key(18, "Knob CCW", 2, 3, kind="knob"),
     ),
 )
 

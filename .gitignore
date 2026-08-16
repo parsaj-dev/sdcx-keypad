@@ -15,3 +15,8 @@ venv/
 result
 result-*
 .direnv/
+
+# Vendor web bundle, kept locally for re-extracting tables. Not redistributed:
+# it is third-party minified JS of unclear licence, and the decisive extracts
+# are already in docs/reference-*.js.
+.vendor-bundle/

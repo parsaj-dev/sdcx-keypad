@@ -141,9 +141,14 @@ Mode `5` is the one that hands per-key colour control to the host (§3.4).
 | 3 | row 3, col 0 | key 4 |
 | 4 | row 0, col 1 | key 5 |
 | 5 | row 1, col 1 | key 6 |
-| 16 | row 1, col 4 | knob press (静音 / mute) |
-| 17 | row 2, col 4 | knob CCW (音量- / volume down) |
-| 18 | row 0, col 4 | knob CW (音量+ / volume up) |
+| 16 | row 1, col 4 | knob press (mute) |
+| 17 | row 2, col 4 | knob CW (volume up) |
+| 18 | row 0, col 4 | knob CCW (volume down) |
+
+The vendor's layout JSON captions 18 as 音量+ and 17 as 音量-, i.e. the opposite
+rotation. That caption is wrong: reading the factory keymap off the device gives
+`17 = volume_up, 18 = volume_down`, and louder-clockwise is universal. Trust the
+device, not the JSON's labels.
 
 Note the gap: knob actions live at indices **16–18**, not 6–8. Per-key colour and
 keymap writes are indexed by this `key_index`, so the addressing is sparse.
