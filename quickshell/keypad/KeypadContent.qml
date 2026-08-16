@@ -435,12 +435,18 @@ Item {
             color: Appearance.colors.colSubtext
         }
 
+        // StyledToolTip falls back to always-visible when its parent has no
+        // `hovered` property, which a bare Rectangle does not — so drive it from
+        // the MouseArea explicitly.
         StyledToolTip {
+            extraVisibleCondition: capMouse.containsMouse
             text: `${cap.keyData.label} — ${cap.capColor}`
         }
 
         MouseArea {
+            id: capMouse
             anchors.fill: parent
+            hoverEnabled: true
             cursorShape: Qt.PointingHandCursor
             // Cycle the swatch palette on click: a full colour picker per key is
             // more chrome than a six-key pad warrants.
@@ -475,7 +481,12 @@ Item {
             }
         }
 
+        HoverHandler {
+            id: knobHover
+        }
+
         StyledToolTip {
+            extraVisibleCondition: knobHover.hovered
             text: Translation.tr("Rotate for volume, press to mute")
         }
     }
