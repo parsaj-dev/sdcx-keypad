@@ -86,7 +86,9 @@ def _hid_name(uevent: str) -> str:
 
 
 def enumerate_devices(
-    vendor_id: int | None = None, product_id: int | None = None
+    vendor_id: int | None = None,
+    product_id: int | None = None,
+    include_unsupported: bool = False,
 ) -> list[DeviceInfo]:
     """Return every SDCX config interface present on the system.
 
@@ -94,6 +96,11 @@ def enumerate_devices(
     only the one whose report descriptor starts with the vendor-defined prefix
     is the config channel. Filtering on the descriptor rather than on an
     interface number keeps this correct if a firmware revision reorders them.
+
+    `include_unsupported` keeps devices whose USB ID is not in the recognised
+    list. Normal operation wants them excluded, but `sdcx report` needs them:
+    a keypad this driver has never heard of is exactly the one worth reporting,
+    and it still announces itself with the same vendor-defined descriptor.
     """
     from .layouts import is_supported
 
@@ -116,7 +123,7 @@ def enumerate_devices(
 
         if not descriptor.startswith(_CONFIG_DESCRIPTOR_PREFIX):
             continue
-        if not is_supported(vid, pid):
+        if not include_unsupported and not is_supported(vid, pid):
             continue
         if vendor_id is not None and vid != vendor_id:
             continue

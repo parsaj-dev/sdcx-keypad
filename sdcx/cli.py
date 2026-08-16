@@ -16,7 +16,7 @@ from pathlib import Path
 
 from .device import DeviceNotFound, PermissionDenied, SdcxError, enumerate_devices
 from .keycodes import CATEGORIES, REGISTRY, by_category, parse_keycode, search
-from .layouts import get_layout, supported_ids
+from .layouts import get_layout, is_supported, supported_ids
 from .protocol import (
     MACRO_SLOTS,
     MAX_BRIGHTNESS,
@@ -406,6 +406,166 @@ def cmd_factory_reset(args) -> int:
     return 0
 
 
+def _sysfs_strings(info) -> dict:
+    """USB descriptor strings for a device, straight from sysfs.
+
+    These are what identify an unknown keypad: the manufacturer and product
+    strings the firmware reports, plus the model markings the reporter can read
+    off the case. lsusb is not assumed to be installed.
+    """
+    out: dict[str, str] = {}
+    try:
+        # /sys/class/hidraw/hidrawN/device is a symlink into the real device
+        # tree, so it has to be resolved before walking up: textually, its
+        # parent is just the hidraw directory again. The USB device that owns
+        # the interface is a couple of levels above, wherever idVendor appears.
+        base = Path(info.uevent_path).resolve().parent
+        for _ in range(6):
+            base = base.parent
+            candidate = base / "idVendor"
+            if candidate.exists():
+                for field in ("manufacturer", "product", "serial", "bcdDevice", "idVendor", "idProduct"):
+                    value = base / field
+                    if value.exists():
+                        out[field] = value.read_text().strip()
+                break
+    except OSError:
+        pass
+    return out
+
+
+def _safe(label: str, fn) -> tuple[str, object]:
+    """Run a probe, turning any failure into reportable text rather than a crash.
+
+    A report is most useful from a device that half works, so one failing probe
+    must not take the rest of the report with it.
+    """
+    try:
+        return label, fn()
+    except Exception as exc:  # noqa: BLE001 - the failure itself is the datum
+        return label, f"FAILED: {type(exc).__name__}: {exc}"
+
+
+def cmd_report(args) -> int:
+    """Collect everything needed to report a device, in one read-only pass."""
+    import platform
+
+    from . import __version__
+
+    devices = enumerate_devices(include_unsupported=True)
+    report: dict = {
+        "ok": True,
+        "sdcx_version": __version__,
+        "python": platform.python_version(),
+        "kernel": platform.release(),
+        "devices": [],
+    }
+    try:
+        for line in Path("/etc/os-release").read_text().splitlines():
+            if line.startswith("PRETTY_NAME="):
+                report["os"] = line.split("=", 1)[1].strip().strip('"')
+    except OSError:
+        pass
+
+    for info in devices:
+        layout = get_layout(info.vendor_id, info.product_id)
+        entry: dict = {
+            **_device_dict(info, layout),
+            "recognised_usb_id": is_supported(info.vendor_id, info.product_id),
+            "sysfs": _sysfs_strings(info),
+        }
+        # Every probe below only reads. Nothing here changes the device, so it
+        # is safe to run on hardware whose behaviour is unknown.
+        try:
+            with Keypad.open(path=info.path) as pad:
+                for label, value in (
+                    _safe("info", lambda: pad.get_keyboard_config().to_dict()),
+                    _safe("light", lambda: pad.get_light().to_dict()),
+                    _safe("key_colors", lambda: {
+                        str(k): "#%02x%02x%02x" % v for k, v in pad.get_key_colors().items()
+                    }),
+                    _safe("keymap", lambda: {
+                        str(i): a.name for i, a in pad.get_keymap().items()
+                    }),
+                ):
+                    entry[label] = value
+        except Exception as exc:  # noqa: BLE001
+            entry["error"] = f"{type(exc).__name__}: {exc}"
+        report["devices"].append(entry)
+
+    if args.json:
+        _emit(report, True)
+        return 0
+
+    print(_format_report(report))
+    return 0
+
+
+def _format_report(report: dict) -> str:
+    """Render the report as markdown, ready to paste into an issue."""
+    lines = [
+        "<!-- sdcx report: paste this whole block into the issue -->",
+        "",
+        "| | |",
+        "|---|---|",
+        f"| sdcx | {report.get('sdcx_version', '?')} |",
+        f"| python | {report.get('python', '?')} |",
+        f"| kernel | {report.get('kernel', '?')} |",
+        f"| os | {report.get('os', 'unknown')} |",
+        "",
+    ]
+    if not report["devices"]:
+        lines += [
+            "**No keypad detected.**",
+            "",
+            "If one is plugged in, it may use a different interface than this driver",
+            "looks for. Please include the output of `lsusb` and",
+            "`ls -l /sys/class/hidraw/*/device/uevent`.",
+        ]
+        return "\n".join(lines)
+
+    for device in report["devices"]:
+        sysfs = device.get("sysfs", {})
+        lines += [
+            f"### {device['usb_id']} ({device.get('model', 'unknown')})",
+            "",
+            "```",
+            f"path          {device['path']}",
+            f"name          {device['name']}",
+            f"manufacturer  {sysfs.get('manufacturer', '?')}",
+            f"product       {sysfs.get('product', '?')}",
+            f"bcdDevice     {sysfs.get('bcdDevice', '?')}",
+            f"recognised    {device['recognised_usb_id']}",
+            f"layout        {'verified' if device['verified'] else 'generic fallback'}"
+            f" ({device['key_count']} keys)",
+            "```",
+            "",
+        ]
+        for label in ("info", "light", "keymap", "key_colors"):
+            value = device.get(label)
+            if value is None:
+                continue
+            lines += [f"**{label}**", "", "```json", json.dumps(value, indent=2), "```", ""]
+        if "error" in device:
+            lines += [f"**could not open the device:** `{device['error']}`", ""]
+
+    lines += [
+        "### What works",
+        "",
+        "<!-- Please replace this list with what you actually observed. -->",
+        "",
+        "- [ ] `sdcx light off` turns the LEDs off",
+        "- [ ] `sdcx light mode <name>` changes the effect",
+        "- [ ] colours match what was asked for",
+        "- [ ] per-key colour works (`sdcx key color 0 '#ff0000'`)",
+        "- [ ] key remapping works (`sdcx keymap set 0 ctrl+c`)",
+        "- [ ] the number of keys above matches the physical device",
+        "",
+        "Model markings on the case, if any: ",
+    ]
+    return "\n".join(lines)
+
+
 def _is_nixos() -> bool:
     try:
         return "ID=nixos" in Path("/etc/os-release").read_text()
@@ -620,6 +780,12 @@ def build_parser() -> argparse.ArgumentParser:
     p = sub.add_parser("factory-reset", help="erase keymap, macros and colours")
     p.add_argument("--yes", action="store_true")
     p.set_defaults(func=cmd_factory_reset)
+
+    p = sub.add_parser(
+        "report",
+        help="collect a device report to paste into a bug report (read-only)",
+    )
+    p.set_defaults(func=cmd_report)
 
     p = sub.add_parser("install-udev-rule", help="grant non-root access permanently")
     p.add_argument("--print", action="store_true", help="print the rule instead of writing it")

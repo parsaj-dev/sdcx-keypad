@@ -339,6 +339,19 @@ sdcx install-udev-rule --print  # print the rule to stdout, write nothing
 sudo sdcx install-udev-rule     # write /etc/udev/rules.d/70-sdcx-keypad.rules
 ```
 
+### Reporting a device
+
+```bash
+sdcx report                     # markdown block, ready to paste into an issue
+sdcx report --json              # the same data as JSON
+```
+
+`report` reads the device and writes nothing to it. It collects the USB descriptor
+strings, the firmware configuration, the current lighting state, the keymap and the
+per-key colours, and formats them for a bug report. Only one of the 196 recognised
+USB IDs has been verified against real hardware, so a report from any other device
+is useful. See [CONTRIBUTING.md](CONTRIBUTING.md).
+
 ---
 
 ## Key layout: HCY-K006

@@ -7,88 +7,38 @@ labels: device
 
 <!--
 Thanks! Device reports are the most useful thing anyone can send this project.
-One device is hardware-verified; everything else is recognised on trust.
-Fill in what you can. A partial report is still worth filing.
+One device is hardware-verified; everything else is recognised on trust, so
+even a report that says "recognised but untested" moves things forward.
+
+Run this from a checkout and paste the whole output below:
+
+    python3 -m sdcx report
+
+It is read-only: it does not change any setting, colour, or mode on the
+device. See CONTRIBUTING.md if you have not set up a checkout yet.
 -->
 
-## USB ID and `lsusb`
-
-<!-- The full line for your keypad. -->
+## `sdcx report` output
 
 ```
-$ lsusb
-
+(paste the full block sdcx report printed, starting with
+<!-- sdcx report: paste this whole block into the issue -->)
 ```
-
-## `sdcx list`
-
-<!-- If it prints nothing, say so; that's the interesting case. -->
-
-```
-$ sdcx list
-
-```
-
-## `sdcx info`
-
-```
-$ sdcx info
-
-```
-
-<details>
-<summary>Optional: <code>sdcx modes</code> and <code>sdcx keys</code></summary>
-
-```
-$ sdcx modes
-
-$ sdcx keys
-
-```
-</details>
-
-## Product string
-
-<!-- Manufacturer and product as reported by USB, e.g. SDINNOVATION / SIDE-KEYBOARD.
-     From the lsusb line above, or: cat /sys/class/hidraw/hidrawN/device/uevent -->
-
-- Manufacturer:
-- Product:
-
-## Model markings
-
-<!-- Anything printed on the device, the PCB, the box, the listing, or the manual,
-     e.g. HCY-K006, a shop name, a vendor site. Rough is fine. -->
-
-- Model / markings:
-- Where you bought it:
-- Physical layout (number of keys, knobs, screen, etc.):
 
 ## What works and what doesn't
 
-<!-- Tick what you tried. Anything you didn't try, leave blank. -->
+<!-- Free text is fine. What did you try, what happened. Anything you didn't
+     try, just leave out. -->
 
-- [ ] `sdcx light off` turns the RGB off, and it stays off after a replug
-- [ ] `sdcx light mode <name>` switches effects
-- [ ] `sdcx light set --brightness / --speed / --color`
-- [ ] `sdcx keys` lists the right number of keys with sensible indices
-- [ ] `sdcx key color 0 '#00ff00'` lights the key you expected (in Custom mode)
-- [ ] `sdcx effect rainbow` runs
+## Model markings
 
-Anything that went wrong, with the exact error text please, not a paraphrase:
+<!-- Anything printed on the device, the PCB, the box, the listing, or the
+     manual, e.g. HCY-K006, a shop name, a vendor site. Rough is fine. -->
 
-```
-
-```
-
-## Environment
-
-- Distro / kernel:
-- Python version:
-- Installed via (pipx / pip / source / Nix):
-- udev rule installed:  yes / no
+- Model / markings:
+- Where you bought it:
 
 ## Anything else
 
-<!-- Screenshots of the vendor web app, a photo of the pad, or a per-device JSON
-     you grabbed from sdcx-tech.com are all welcome. -->
+<!-- Screenshots of the vendor web app, a photo of the pad, or a per-device
+     JSON you grabbed from sdcx-tech.com are all welcome. -->
