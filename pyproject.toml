@@ -1,0 +1,50 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "sdcx-keypad"
+version = "0.1.0"
+description = "Linux driver and CLI for SDCX / SDINNOVATION USB macropads (HCY-K006 and family)"
+readme = "README.md"
+requires-python = ">=3.11"
+license = { text = "MIT" }
+authors = [{ name = "parsaj-dev" }]
+keywords = ["hid", "hidraw", "macropad", "keypad", "rgb", "sdcx", "linux"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Environment :: Console",
+    "Intended Audience :: End Users/Desktop",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: POSIX :: Linux",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: System :: Hardware :: Hardware Drivers",
+    "Typing :: Typed",
+]
+# No dependencies, and that is a design constraint rather than an accident: the
+# vendor config interface is a plain 64-byte hidraw channel, so the standard
+# library is enough, and the CLI can be driven from a Quickshell widget on a
+# machine with no Python environment at all.
+dependencies = []
+
+[project.scripts]
+sdcx = "sdcx.cli:main"
+
+[project.urls]
+Homepage = "https://github.com/parsaj-dev/sdcx-keypad"
+Source = "https://github.com/parsaj-dev/sdcx-keypad"
+Issues = "https://github.com/parsaj-dev/sdcx-keypad/issues"
+Protocol = "https://github.com/parsaj-dev/sdcx-keypad/blob/main/docs/PROTOCOL.md"
+
+[tool.setuptools]
+packages = ["sdcx"]
+
+# layouts.py reads devices.json at import time from inside the package, so it
+# must travel with the wheel; without this a wheel install would silently
+# recognise only the devices with a transcribed layout.
+
+[tool.setuptools.package-data]
+sdcx = ["devices.json"]

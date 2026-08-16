@@ -1,0 +1,790 @@
+{
+  "note": "USB IDs the vendor WebHID configurator (sdcx-tech.com) accepts, extracted from its bundle. usagePage 0xFF00 / usage 0x02.",
+  "count": 196,
+  "devices": [
+    {
+      "vendor_id": "0x0461",
+      "product_id": "0x4001"
+    },
+    {
+      "vendor_id": "0x0461",
+      "product_id": "0x4002"
+    },
+    {
+      "vendor_id": "0x0461",
+      "product_id": "0x4003"
+    },
+    {
+      "vendor_id": "0x0483",
+      "product_id": "0x0010"
+    },
+    {
+      "vendor_id": "0x05ac",
+      "product_id": "0x021d"
+    },
+    {
+      "vendor_id": "0x05ac",
+      "product_id": "0x021e"
+    },
+    {
+      "vendor_id": "0x05ac",
+      "product_id": "0x024f"
+    },
+    {
+      "vendor_id": "0x05ac",
+      "product_id": "0x0250"
+    },
+    {
+      "vendor_id": "0x05ac",
+      "product_id": "0x0255"
+    },
+    {
+      "vendor_id": "0x0816",
+      "product_id": "0x021d"
+    },
+    {
+      "vendor_id": "0x0816",
+      "product_id": "0x021f"
+    },
+    {
+      "vendor_id": "0x0816",
+      "product_id": "0x0220"
+    },
+    {
+      "vendor_id": "0x0816",
+      "product_id": "0x024c"
+    },
+    {
+      "vendor_id": "0x0816",
+      "product_id": "0x0600"
+    },
+    {
+      "vendor_id": "0x0816",
+      "product_id": "0x0601"
+    },
+    {
+      "vendor_id": "0x0816",
+      "product_id": "0x0605"
+    },
+    {
+      "vendor_id": "0x0816",
+      "product_id": "0x060a"
+    },
+    {
+      "vendor_id": "0x0816",
+      "product_id": "0x060b"
+    },
+    {
+      "vendor_id": "0x0816",
+      "product_id": "0x060c"
+    },
+    {
+      "vendor_id": "0x0816",
+      "product_id": "0x060d"
+    },
+    {
+      "vendor_id": "0x0816",
+      "product_id": "0x06a0"
+    },
+    {
+      "vendor_id": "0x0816",
+      "product_id": "0x06a1"
+    },
+    {
+      "vendor_id": "0x0816",
+      "product_id": "0x06ab"
+    },
+    {
+      "vendor_id": "0x0816",
+      "product_id": "0x246d"
+    },
+    {
+      "vendor_id": "0x0816",
+      "product_id": "0x246e"
+    },
+    {
+      "vendor_id": "0x0816",
+      "product_id": "0x246f"
+    },
+    {
+      "vendor_id": "0x0816",
+      "product_id": "0x2470"
+    },
+    {
+      "vendor_id": "0x0816",
+      "product_id": "0x2471"
+    },
+    {
+      "vendor_id": "0x0816",
+      "product_id": "0x2472"
+    },
+    {
+      "vendor_id": "0x0816",
+      "product_id": "0x2473"
+    },
+    {
+      "vendor_id": "0x0816",
+      "product_id": "0x2474"
+    },
+    {
+      "vendor_id": "0x0816",
+      "product_id": "0x2475"
+    },
+    {
+      "vendor_id": "0x0816",
+      "product_id": "0x2476"
+    },
+    {
+      "vendor_id": "0x0816",
+      "product_id": "0x2477"
+    },
+    {
+      "vendor_id": "0x0816",
+      "product_id": "0x2478"
+    },
+    {
+      "vendor_id": "0x0816",
+      "product_id": "0x2479"
+    },
+    {
+      "vendor_id": "0x0817",
+      "product_id": "0xd18a"
+    },
+    {
+      "vendor_id": "0x0817",
+      "product_id": "0xdcfb"
+    },
+    {
+      "vendor_id": "0x0818",
+      "product_id": "0xd18a"
+    },
+    {
+      "vendor_id": "0x0818",
+      "product_id": "0xdcfa"
+    },
+    {
+      "vendor_id": "0x0818",
+      "product_id": "0xdcfb"
+    },
+    {
+      "vendor_id": "0x0819",
+      "product_id": "0xd18a"
+    },
+    {
+      "vendor_id": "0x08a1",
+      "product_id": "0xdcfc"
+    },
+    {
+      "vendor_id": "0x08a3",
+      "product_id": "0x1cfc"
+    },
+    {
+      "vendor_id": "0x08a3",
+      "product_id": "0x2cfc"
+    },
+    {
+      "vendor_id": "0x08a3",
+      "product_id": "0x3cfc"
+    },
+    {
+      "vendor_id": "0x08a5",
+      "product_id": "0xdcfc"
+    },
+    {
+      "vendor_id": "0x08ae",
+      "product_id": "0xdcfb"
+    },
+    {
+      "vendor_id": "0x3151",
+      "product_id": "0x4010"
+    },
+    {
+      "vendor_id": "0x3151",
+      "product_id": "0x6000"
+    },
+    {
+      "vendor_id": "0x35ae",
+      "product_id": "0x0250"
+    },
+    {
+      "vendor_id": "0x35ae",
+      "product_id": "0x0251"
+    },
+    {
+      "vendor_id": "0x35ae",
+      "product_id": "0x0252"
+    },
+    {
+      "vendor_id": "0x35ae",
+      "product_id": "0x0253"
+    },
+    {
+      "vendor_id": "0x35ae",
+      "product_id": "0x0254"
+    },
+    {
+      "vendor_id": "0x35ae",
+      "product_id": "0x0255"
+    },
+    {
+      "vendor_id": "0x35ae",
+      "product_id": "0x0256"
+    },
+    {
+      "vendor_id": "0x35ae",
+      "product_id": "0x0257"
+    },
+    {
+      "vendor_id": "0x35ae",
+      "product_id": "0x0258"
+    },
+    {
+      "vendor_id": "0x35ae",
+      "product_id": "0x02a4"
+    },
+    {
+      "vendor_id": "0x35ae",
+      "product_id": "0xdcfc"
+    },
+    {
+      "vendor_id": "0x36ae",
+      "product_id": "0x021d"
+    },
+    {
+      "vendor_id": "0x36ae",
+      "product_id": "0x021e"
+    },
+    {
+      "vendor_id": "0x36ae",
+      "product_id": "0x021f"
+    },
+    {
+      "vendor_id": "0x36ae",
+      "product_id": "0x0220"
+    },
+    {
+      "vendor_id": "0x36ae",
+      "product_id": "0x0221"
+    },
+    {
+      "vendor_id": "0x36ae",
+      "product_id": "0x0222"
+    },
+    {
+      "vendor_id": "0x36ae",
+      "product_id": "0x0223"
+    },
+    {
+      "vendor_id": "0x36ae",
+      "product_id": "0x0224"
+    },
+    {
+      "vendor_id": "0x36ae",
+      "product_id": "0x0225"
+    },
+    {
+      "vendor_id": "0x36ae",
+      "product_id": "0x0227"
+    },
+    {
+      "vendor_id": "0x36ae",
+      "product_id": "0x0230"
+    },
+    {
+      "vendor_id": "0x36ae",
+      "product_id": "0x0250"
+    },
+    {
+      "vendor_id": "0x36ae",
+      "product_id": "0x0252"
+    },
+    {
+      "vendor_id": "0x36ae",
+      "product_id": "0x0257"
+    },
+    {
+      "vendor_id": "0x36ae",
+      "product_id": "0x0258"
+    },
+    {
+      "vendor_id": "0x36ae",
+      "product_id": "0x0259"
+    },
+    {
+      "vendor_id": "0x36ae",
+      "product_id": "0x0260"
+    },
+    {
+      "vendor_id": "0x36ae",
+      "product_id": "0x0261"
+    },
+    {
+      "vendor_id": "0x36ae",
+      "product_id": "0x0262"
+    },
+    {
+      "vendor_id": "0x36ae",
+      "product_id": "0x0263"
+    },
+    {
+      "vendor_id": "0x36ae",
+      "product_id": "0x0264"
+    },
+    {
+      "vendor_id": "0x36ae",
+      "product_id": "0x0265"
+    },
+    {
+      "vendor_id": "0x36ae",
+      "product_id": "0x0266"
+    },
+    {
+      "vendor_id": "0x36ae",
+      "product_id": "0x0267"
+    },
+    {
+      "vendor_id": "0x36ae",
+      "product_id": "0x0268"
+    },
+    {
+      "vendor_id": "0x36ae",
+      "product_id": "0x0269"
+    },
+    {
+      "vendor_id": "0x36ae",
+      "product_id": "0x0270"
+    },
+    {
+      "vendor_id": "0x36ae",
+      "product_id": "0x0355"
+    },
+    {
+      "vendor_id": "0x36ae",
+      "product_id": "0x03ff"
+    },
+    {
+      "vendor_id": "0x36ae",
+      "product_id": "0x060e"
+    },
+    {
+      "vendor_id": "0x36ae",
+      "product_id": "0x060f"
+    },
+    {
+      "vendor_id": "0x36ae",
+      "product_id": "0x0610"
+    },
+    {
+      "vendor_id": "0x36ae",
+      "product_id": "0x0634"
+    },
+    {
+      "vendor_id": "0x36ae",
+      "product_id": "0x0635"
+    },
+    {
+      "vendor_id": "0x36ae",
+      "product_id": "0x06f3"
+    },
+    {
+      "vendor_id": "0x36ae",
+      "product_id": "0x06f6"
+    },
+    {
+      "vendor_id": "0x36ae",
+      "product_id": "0x1433"
+    },
+    {
+      "vendor_id": "0x36ae",
+      "product_id": "0x1434"
+    },
+    {
+      "vendor_id": "0x36ae",
+      "product_id": "0x1435"
+    },
+    {
+      "vendor_id": "0x36ae",
+      "product_id": "0x1437"
+    },
+    {
+      "vendor_id": "0x36ae",
+      "product_id": "0x1438"
+    },
+    {
+      "vendor_id": "0x36ae",
+      "product_id": "0x1439"
+    },
+    {
+      "vendor_id": "0x36ae",
+      "product_id": "0x1440"
+    },
+    {
+      "vendor_id": "0x36ae",
+      "product_id": "0x1903"
+    },
+    {
+      "vendor_id": "0x36ae",
+      "product_id": "0x1904"
+    },
+    {
+      "vendor_id": "0x36ae",
+      "product_id": "0x1905"
+    },
+    {
+      "vendor_id": "0x36ae",
+      "product_id": "0x2231"
+    },
+    {
+      "vendor_id": "0x36ae",
+      "product_id": "0x2232"
+    },
+    {
+      "vendor_id": "0x36ae",
+      "product_id": "0x2233"
+    },
+    {
+      "vendor_id": "0x36ae",
+      "product_id": "0x246d"
+    },
+    {
+      "vendor_id": "0x36ae",
+      "product_id": "0x246e"
+    },
+    {
+      "vendor_id": "0x36ae",
+      "product_id": "0x246f"
+    },
+    {
+      "vendor_id": "0x36ae",
+      "product_id": "0x2471"
+    },
+    {
+      "vendor_id": "0x36ae",
+      "product_id": "0x2472"
+    },
+    {
+      "vendor_id": "0x36ae",
+      "product_id": "0x2473"
+    },
+    {
+      "vendor_id": "0x36ae",
+      "product_id": "0x2474"
+    },
+    {
+      "vendor_id": "0x36ae",
+      "product_id": "0x2475"
+    },
+    {
+      "vendor_id": "0x36ae",
+      "product_id": "0x4001"
+    },
+    {
+      "vendor_id": "0x36ae",
+      "product_id": "0x4002"
+    },
+    {
+      "vendor_id": "0x36ae",
+      "product_id": "0x4003"
+    },
+    {
+      "vendor_id": "0x36ae",
+      "product_id": "0x4004"
+    },
+    {
+      "vendor_id": "0x36ae",
+      "product_id": "0x4005"
+    },
+    {
+      "vendor_id": "0x36ae",
+      "product_id": "0x4006"
+    },
+    {
+      "vendor_id": "0x36ae",
+      "product_id": "0x4007"
+    },
+    {
+      "vendor_id": "0x36ae",
+      "product_id": "0xf021"
+    },
+    {
+      "vendor_id": "0x36ae",
+      "product_id": "0xf024"
+    },
+    {
+      "vendor_id": "0x36ae",
+      "product_id": "0xf031"
+    },
+    {
+      "vendor_id": "0x36ae",
+      "product_id": "0xf041"
+    },
+    {
+      "vendor_id": "0x36ae",
+      "product_id": "0xf042"
+    },
+    {
+      "vendor_id": "0x36ae",
+      "product_id": "0xf043"
+    },
+    {
+      "vendor_id": "0x36ae",
+      "product_id": "0xf051"
+    },
+    {
+      "vendor_id": "0x36ae",
+      "product_id": "0xf069"
+    },
+    {
+      "vendor_id": "0x36ae",
+      "product_id": "0xf070"
+    },
+    {
+      "vendor_id": "0x36ae",
+      "product_id": "0xf100"
+    },
+    {
+      "vendor_id": "0x36ae",
+      "product_id": "0xf101"
+    },
+    {
+      "vendor_id": "0x36ae",
+      "product_id": "0xf2ff"
+    },
+    {
+      "vendor_id": "0x36ae",
+      "product_id": "0xfc1b"
+    },
+    {
+      "vendor_id": "0x36ae",
+      "product_id": "0xfc1c"
+    },
+    {
+      "vendor_id": "0x36ae",
+      "product_id": "0xfda4"
+    },
+    {
+      "vendor_id": "0x36ae",
+      "product_id": "0xfda8"
+    },
+    {
+      "vendor_id": "0x36ae",
+      "product_id": "0xfe12"
+    },
+    {
+      "vendor_id": "0x36ae",
+      "product_id": "0xfe61"
+    },
+    {
+      "vendor_id": "0x36ae",
+      "product_id": "0xfe62"
+    },
+    {
+      "vendor_id": "0x36ae",
+      "product_id": "0xfe63"
+    },
+    {
+      "vendor_id": "0x36ae",
+      "product_id": "0xfe68"
+    },
+    {
+      "vendor_id": "0x36ae",
+      "product_id": "0xfe70"
+    },
+    {
+      "vendor_id": "0x36ae",
+      "product_id": "0xfe71"
+    },
+    {
+      "vendor_id": "0x36ae",
+      "product_id": "0xfe81"
+    },
+    {
+      "vendor_id": "0x36ae",
+      "product_id": "0xfe83"
+    },
+    {
+      "vendor_id": "0x36ae",
+      "product_id": "0xfe98"
+    },
+    {
+      "vendor_id": "0x36ae",
+      "product_id": "0xfe9c"
+    },
+    {
+      "vendor_id": "0x36ae",
+      "product_id": "0xfe9d"
+    },
+    {
+      "vendor_id": "0x36ae",
+      "product_id": "0xfea3"
+    },
+    {
+      "vendor_id": "0x36ae",
+      "product_id": "0xfeab"
+    },
+    {
+      "vendor_id": "0x36ae",
+      "product_id": "0xfeac"
+    },
+    {
+      "vendor_id": "0x36ae",
+      "product_id": "0xfead"
+    },
+    {
+      "vendor_id": "0x36ae",
+      "product_id": "0xfeae"
+    },
+    {
+      "vendor_id": "0x36ae",
+      "product_id": "0xfeb1"
+    },
+    {
+      "vendor_id": "0x36ae",
+      "product_id": "0xfeb2"
+    },
+    {
+      "vendor_id": "0x36ae",
+      "product_id": "0xfebb"
+    },
+    {
+      "vendor_id": "0x36ae",
+      "product_id": "0xfebc"
+    },
+    {
+      "vendor_id": "0x36ae",
+      "product_id": "0xfebd"
+    },
+    {
+      "vendor_id": "0x36ae",
+      "product_id": "0xfebe"
+    },
+    {
+      "vendor_id": "0x36ae",
+      "product_id": "0xfeec"
+    },
+    {
+      "vendor_id": "0x36ae",
+      "product_id": "0xfeed"
+    },
+    {
+      "vendor_id": "0x36ae",
+      "product_id": "0xff01"
+    },
+    {
+      "vendor_id": "0x36ae",
+      "product_id": "0xff61"
+    },
+    {
+      "vendor_id": "0x5566",
+      "product_id": "0x0009"
+    },
+    {
+      "vendor_id": "0x68bd",
+      "product_id": "0xdcfc"
+    },
+    {
+      "vendor_id": "0x6d02",
+      "product_id": "0xdcfc"
+    },
+    {
+      "vendor_id": "0x6d03",
+      "product_id": "0xdcfc"
+    },
+    {
+      "vendor_id": "0x6d04",
+      "product_id": "0xdcfc"
+    },
+    {
+      "vendor_id": "0x6d05",
+      "product_id": "0xdcfc"
+    },
+    {
+      "vendor_id": "0x6d06",
+      "product_id": "0xdcfc"
+    },
+    {
+      "vendor_id": "0x6d07",
+      "product_id": "0xdcfc"
+    },
+    {
+      "vendor_id": "0x6d7b",
+      "product_id": "0xdcfa"
+    },
+    {
+      "vendor_id": "0x6d7c",
+      "product_id": "0xdcfb"
+    },
+    {
+      "vendor_id": "0x6d7d",
+      "product_id": "0xdcfc"
+    },
+    {
+      "vendor_id": "0x6d7e",
+      "product_id": "0xdcfd"
+    },
+    {
+      "vendor_id": "0x6d7f",
+      "product_id": "0xdcfe"
+    },
+    {
+      "vendor_id": "0x6d80",
+      "product_id": "0xdc81"
+    },
+    {
+      "vendor_id": "0x6d81",
+      "product_id": "0xdc82"
+    },
+    {
+      "vendor_id": "0x6d82",
+      "product_id": "0xdc83"
+    },
+    {
+      "vendor_id": "0x6d83",
+      "product_id": "0xdc84"
+    },
+    {
+      "vendor_id": "0x6d83",
+      "product_id": "0xdc85"
+    },
+    {
+      "vendor_id": "0x6d83",
+      "product_id": "0xdcfa"
+    },
+    {
+      "vendor_id": "0x7dfa",
+      "product_id": "0x37a1"
+    },
+    {
+      "vendor_id": "0x7dfa",
+      "product_id": "0xdcfa"
+    },
+    {
+      "vendor_id": "0x7dfa",
+      "product_id": "0xdcfb"
+    },
+    {
+      "vendor_id": "0x7dfa",
+      "product_id": "0xdcfc"
+    },
+    {
+      "vendor_id": "0x7dfa",
+      "product_id": "0xdcfd"
+    },
+    {
+      "vendor_id": "0x7dfa",
+      "product_id": "0xdcfe"
+    },
+    {
+      "vendor_id": "0x7dfa",
+      "product_id": "0xdcff"
+    },
+    {
+      "vendor_id": "0x7dfa",
+      "product_id": "0xddfc"
+    },
+    {
+      "vendor_id": "0x7dfa",
+      "product_id": "0xdefa"
+    }
+  ]
+}
