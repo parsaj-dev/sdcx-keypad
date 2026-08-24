@@ -2,7 +2,7 @@
 
 Most contributions here take two minutes and need nothing but the keypad already
 on the desk. You do not need to know the USB protocol, read the firmware, or set
-anything up: there are 196 recognised USB IDs and only one that has been
+anything up: there are 196 recognised USB IDs and two that have been
 verified against real hardware, so a short report from anyone else's keypad is
 genuinely useful. Pick whatever below matches the time you have.
 

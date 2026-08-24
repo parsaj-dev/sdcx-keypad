@@ -31,9 +31,10 @@ that might mean something else on a given device.
 | model | USB ID | strings | hardware |
 |---|---|---|---|
 | **HCY-K006** | `0816:246f` | product `SIDE-KEYBOARD`, manufacturer `SDINNOVATION`, MCU `951` | 6 keys plus a clickable rotary encoder. Sold by Shenzhen HCY (szhcykb.com). |
+| **SD014-K007** | `0816:2473` | product `SIDE-KEYBOARD`, manufacturer `SDINNOVATION`, MCU `951` | 12 keys plus two clickable rotary encoders. PCB marking `SD014_K007_12Key_RGB_V1.0`. |
 
-That is the complete verified list: one device, because it is the one the maintainer owns.
-Everything else below is recognised and expected to work, but untested.
+Two of the 196 recognised IDs have been run against real hardware. Everything else below is
+recognised and expected to work, but untested.
 
 ---
 
