@@ -126,8 +126,53 @@ _K006 = Layout(
     ),
 )
 
+# 0816_2473.json declares exactly the K006's six light modes with the same
+# capability flags, so the mode tuple is shared rather than restated.
+_K007 = Layout(
+    model="SD014-K007",
+    vendor_id=0x0816,
+    product_id=0x2473,
+    matrix_rows=6,
+    matrix_cols=5,
+    mcu_type="951",
+    verified=True,
+    modes=_K006_MODES,
+    keys=(
+        # Three visual rows of four, from the x/y coordinates in
+        # 0816_2473.json: indices 0-3 sit at y=0.57, 4-7 at y=1.86,
+        # 8-11 at y=3.16.
+        Key(0, "Key 1", 0, 0),
+        Key(1, "Key 2", 0, 1),
+        Key(2, "Key 3", 0, 2),
+        Key(3, "Key 4", 0, 3),
+        Key(4, "Key 5", 1, 0),
+        Key(5, "Key 6", 1, 1),
+        Key(6, "Key 7", 1, 2),
+        Key(7, "Key 8", 1, 3),
+        Key(8, "Key 9", 2, 0),
+        Key(9, "Key 10", 2, 1),
+        Key(10, "Key 11", 2, 2),
+        Key(11, "Key 12", 2, 3),
+        # Two clickable rotary encoders, three actions each. The index block
+        # is sparse exactly like the K006's: keys end at 11 and encoders take
+        # 16-21, with nothing at 12-15.
+        #
+        # Rotation direction is taken from the hardware: turning each encoder
+        # clockwise fires 17 (top) and 20 (bottom), counter-clockwise fires 18
+        # and 21. The vendor's layout JSON captions them the other way round,
+        # as it does on the K006; trust the device.
+        Key(17, "Knob 1 CW", 0, 4, kind="knob"),
+        Key(16, "Knob 1 press", 1, 4, kind="knob"),
+        Key(18, "Knob 1 CCW", 2, 4, kind="knob"),
+        Key(20, "Knob 2 CW", 0, 5, kind="knob"),
+        Key(19, "Knob 2 press", 1, 5, kind="knob"),
+        Key(21, "Knob 2 CCW", 2, 5, kind="knob"),
+    ),
+)
+
 LAYOUTS: dict[tuple[int, int], Layout] = {
     (_K006.vendor_id, _K006.product_id): _K006,
+    (_K007.vendor_id, _K007.product_id): _K007,
 }
 
 

@@ -71,8 +71,9 @@ Support falls into two tiers:
 - **196 USB IDs across 32 vendor IDs are recognised**, the same set the vendor's own WebHID
   configurator accepts. These pads are sold under dozens of unbranded names; the silicon and the
   protocol are shared across them.
-- **One device is hardware-verified: `0816:246f` (HCY-K006)**, six keys plus a clickable rotary
-  encoder, identifying as `SIDE-KEYBOARD` / `SDINNOVATION`. Every other recognised ID uses the
+- **Two devices are hardware-verified**: `0816:246f` (HCY-K006), six keys plus a clickable rotary
+  encoder, and `0816:2473` (SD014-K007), twelve keys plus two clickable rotary encoders. Both
+  identify as `SIDE-KEYBOARD` / `SDINNOVATION`. Every other recognised ID uses the
   **generic fallback**: global lighting (off, mode, brightness, speed, colour) works, because it
   is identical across the family, but per-key operations report that the layout is unknown
   rather than guessing at key indices. `sdcx list` marks these `(layout unverified)`.
@@ -348,8 +349,8 @@ sdcx report --json              # the same data as JSON
 
 `report` reads the device and writes nothing to it. It collects the USB descriptor
 strings, the firmware configuration, the current lighting state, the keymap and the
-per-key colours, and formats them for a bug report. Only one of the 196 recognised
-USB IDs has been verified against real hardware, so a report from any other device
+per-key colours, and formats them for a bug report. Only two of the 196 recognised
+USB IDs have been verified against real hardware, so a report from any other device
 is useful. See [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ---
