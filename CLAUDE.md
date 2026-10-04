@@ -73,8 +73,7 @@ a confusing "file not found" from the builder rather than a useful error.
 
 ## Version control
 
-Plain git, not GitButler. This repo is not registered as a GitButler project, so `but` commands
-fail here with a setup prompt. Use `git` directly, and `gh` for the remote.
+Plain git. Use `git` directly, and `gh` for the remote.
 
 Branch is `master`, remote `origin` is `git@github.com:parsaj-dev/sdcx-keypad.git` (public).
 
